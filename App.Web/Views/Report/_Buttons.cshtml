@@ -1,0 +1,53 @@
+﻿@model IEnumerable<AccountRole>
+
+<div class="row mb-3">
+    <div id="divAnalyst" class="col-md-4">
+        @if(Model.FirstOrDefault(r => r.Name == "Аналитик") != null)
+        {
+            <button id="popular" type="button" class="btn btn-primary btn-block">Популярные</button>    
+        }
+    </div>
+    <div id="divManager" class="col-md-4">
+        @if (Model.FirstOrDefault(r => r.Name == "Менеджер") != null)
+        {
+            <button id="actual" type="button" class="btn btn-primary btn-block">Актуальные</button>
+        }
+    </div>
+    <div id="divDirector" class="col-md-4">
+        @if (Model.FirstOrDefault(r => r.Name == "Руководитель") != null)
+        {
+            <button id="top" type="button" class="btn btn-primary btn-block">Топ 5</button>
+        }
+    </div>
+</div>
+
+<div id="divData">
+</div>
+
+<script>
+
+    $("#popular").click(GetData);
+    $("#actual").click(GetData);
+    $("#top").click(GetData);
+
+    function GetData() {
+
+        $.ajax({
+            url: "/Report/GetData",
+            data: {
+                request: $(this).attr("id")
+            },
+            beforeSend: function () {
+                $("#divData").empty();
+            },
+            success: function (data) {
+                $('#divData').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert.log(textStatus);
+            }
+        });
+
+    }
+
+</script>
